@@ -281,7 +281,7 @@ export function RfiiScoreCardBody({
         <SummaryChip label="High risk" value={failed ? "—" : high} color="hsl(var(--risk-high))" />
         <SummaryChip label="Low risk" value={failed ? "—" : low} color="hsl(var(--risk-low))" />
         <SummaryChip
-          label="LIMITED_SIGNAL"
+          label="Limited data"
           value={failed ? "—" : limited}
           color="hsl(var(--muted-foreground))"
           tip="Provinces with fewer than 5 news reports this quarter. Their forecast relies less on the news."

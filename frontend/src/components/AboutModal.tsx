@@ -146,7 +146,7 @@ export function AboutModal() {
               A figure not yet published at the issue date is filled with its typical value and flagged as missing; it is
               never counted as zero or as low risk. News about a single province is the one exception: when there was none,
               that province's news counts as "no change from usual". Provinces with fewer than 5 news stories about them are
-              marked LIMITED_SIGNAL.
+              marked "Limited data".
             </p>
           </Section>
 
