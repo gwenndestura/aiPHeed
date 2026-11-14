@@ -273,13 +273,15 @@ function Methodology() {
 
 /* ---------------- ACCURACY ---------------- */
 /* FINAL walk-forward, 72 provincial forecasts (ENNS 2018, 2019, 2021), 5-seed mean; pooled figures from
-   aiPHeed_final_readiness_20261113/evidence/five_metrics_by_round_lead.csv; Brier from B1_five_metrics_by_model_lead.csv. */
+   aiPHeed_final_readiness_20261113/evidence/five_metrics_by_round_lead.csv; Brier from B1_five_metrics_by_model_lead.csv.
+   Weighted F1 (the thesis target metric) is computed from the same pooled confusion counts (/api/v1/final/risk/evaluation:
+   Lead 1 TP 20, FP 5, FN 5, TN 42). */
 const LEADS = [
-  { label: "1 quarter ahead", reliable: true, acc: "86.1%", prec: "80%", rec: "80%", f1: "80%", auc: "0.898", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "2 quarters ahead", reliable: true, acc: "84.7%", prec: "76.9%", rec: "80%", f1: "78.4%", auc: "0.899", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "3 quarters ahead", acc: "81.9%", prec: "73.1%", rec: "76%", f1: "74.5%", auc: "0.883", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "4 quarters ahead", acc: "81.9%", prec: "71.4%", rec: "80%", f1: "75.5%", auc: "0.885", tested: "72 provincial forecasts, 3 survey rounds" },
-  { label: "5 quarters ahead", acc: "79.2%", prec: "67.9%", rec: "76%", f1: "71.7%", auc: "0.874", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "1 quarter ahead", reliable: true, acc: "86.1%", prec: "80%", rec: "80%", f1: "80%", wf1: "86.1%", auc: "0.898", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "2 quarters ahead", reliable: true, acc: "84.7%", prec: "76.9%", rec: "80%", f1: "78.4%", wf1: "84.8%", auc: "0.899", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "3 quarters ahead", acc: "81.9%", prec: "73.1%", rec: "76%", f1: "74.5%", wf1: "82%", auc: "0.883", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "4 quarters ahead", acc: "81.9%", prec: "71.4%", rec: "80%", f1: "75.5%", wf1: "82.2%", auc: "0.885", tested: "72 provincial forecasts, 3 survey rounds" },
+  { label: "5 quarters ahead", acc: "79.2%", prec: "67.9%", rec: "76%", f1: "71.7%", wf1: "79.4%", auc: "0.874", tested: "72 provincial forecasts, 3 survey rounds" },
 ];
 const LEAD_METRICS = [
   ["acc", "Accuracy"],

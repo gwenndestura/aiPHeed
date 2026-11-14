@@ -201,7 +201,9 @@ describe("Landing page", () => {
     rows.forEach((r, i) => {
       const L = String(i + 1);
       const m = FIGURES[L].HCW;
-      expect(r).toEqual([pctTxt(HORIZON[L].accuracy), pctTxt(m.precision_high), pctTxt(m.recall_high), pctTxt(m.f1_high), m.auc_roc.toFixed(3)]);
+      // weighted F1 from the pooled confusion counts (Lead 1: TP 20, FP 5, FN 5, TN 42 -> 0.861)
+      const WF1 = ["86.1%", "84.8%", "82%", "82.2%", "79.4%"];
+      expect(r).toEqual([pctTxt(HORIZON[L].accuracy), pctTxt(m.precision_high), pctTxt(m.recall_high), pctTxt(m.f1_high), WF1[i], m.auc_roc.toFixed(3)]);
     });
     const heads = [...table.querySelectorAll("tbody th")].map((th) => th.textContent);
     expect(heads.slice(0, 2).every((h) => h?.includes("All five measures 75% or more (pooled)"))).toBe(true);
@@ -229,7 +231,7 @@ describe("Landing page", () => {
       ["Logistic regression, all inputs", "0.320"],
     ]);
     expect(container.querySelector("#accuracy")?.textContent).toContain(
-      "Same 72 provincial forecasts. The advantage over each baseline is statistically established",
+      "Same 72 provincial forecasts. The advantage over naive persistence is statistically established",
     );
   });
 
