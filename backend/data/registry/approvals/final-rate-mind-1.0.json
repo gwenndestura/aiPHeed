@@ -1,0 +1,34 @@
+{
+ "model_id": "final-rate-mind-1.0",
+ "version": "FINAL (RATE + MIND) LightGBM, frozen fit (5 seeds x Leads 1-2); monthly issues on the 10th",
+ "artifact_path": "data/final/model/frozen_final.pkl",
+ "artifact_file_sha256": "e1f8675fdaf48335db51298a7b705b058ecad7245d52a42efcd048ee0630b6a2",
+ "approved_utc": "2026-11-14T01:11:44+00:00",
+ "approver": "owner approval in chat 2026-11-14: production with the every-round rule (R1) waived",
+ "gate": {
+  "passed": true,
+  "artifact_file_sha256": "e1f8675fdaf48335db51298a7b705b058ecad7245d52a42efcd048ee0630b6a2",
+  "waivers": [
+   "R1"
+  ],
+  "waiver_note": "Owner approval in chat 2026-11-14 (merge to main and deploy): register FINAL as production with the every-round rule waived. Every-round failures: 2018 precision 72.7%; 2021 recall 25% (1 of 4 HIGH) and F1 below 75%.",
+  "evidence": "research_notes/aiPHeed_final_official_20261113/12_PASS_FAIL_ASSESSMENT.md; data/final/meta/thesis_metrics.json",
+  "checks": [
+   {
+    "id": "P1",
+    "status": "pass",
+    "name": "Lead 1: accuracy, precision, recall, F1 >= 75% and AUC >= 0.75, pooled (86.1/80/80/80%, 0.898)"
+   },
+   {
+    "id": "P2",
+    "status": "pass",
+    "name": "Lead 2: same five metrics pooled (84.7/76.9/80/78.4%, 0.899)"
+   },
+   {
+    "id": "R1",
+    "status": "owner_waiver",
+    "name": "Every survey round passes all five metrics: fails (2018 precision 72.7%; 2021 recall 25%, F1)"
+   }
+  ]
+ }
+}
